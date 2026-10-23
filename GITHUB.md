@@ -2,10 +2,10 @@
 
 repo: clickbytes/kubik
 checked_utc: 2026-10-23
-branch: main (unborn)
+branch: stage1/integration (from origin/main)
 worktree: D:/Git/flows (primary)
-active: S1-00 #11 architecture sketch; S1-01 #3 follows
-next: review the S1-00 baseline, commit local project map and workflow files, then resolve S1-01 decisions
+active: Stage 1 batch #2; S1-01 through S1-07 delegated, coordinator owns integration and S1-08
+next: integrate worker branches, run acceptance checks, review PRs, merge verified work
 
 ## Issues
 
@@ -14,21 +14,29 @@ next: review the S1-00 baseline, commit local project map and workflow files, th
 | CHARTER | [#1](https://github.com/clickbytes/kubik/issues/1) | — | open | in_progress | main / primary |
 | S1-E | [#2](https://github.com/clickbytes/kubik/issues/2) | — | open | planned | main / primary |
 | S1-00 | [#11](https://github.com/clickbytes/kubik/issues/11) | #2 | open | in_progress | main / primary |
-| S1-01 | [#3](https://github.com/clickbytes/kubik/issues/3) | #2 | open | planned | main / primary |
-| S1-02 | [#4](https://github.com/clickbytes/kubik/issues/4) | #2 | open | planned | stage1/bootstrap / primary (proposed) |
-| S1-03 | [#5](https://github.com/clickbytes/kubik/issues/5) | #2 | open | planned | issue plan in #5 |
-| S1-04 | [#6](https://github.com/clickbytes/kubik/issues/6) | #2 | open | planned | issue plan in #6 |
-| S1-05 | [#7](https://github.com/clickbytes/kubik/issues/7) | #2 | open | planned | issue plan in #7 |
-| S1-06 | [#8](https://github.com/clickbytes/kubik/issues/8) | #2 | open | planned | issue plan in #8 |
-| S1-07 | [#9](https://github.com/clickbytes/kubik/issues/9) | #2 | open | planned | issue plan in #9 |
-| S1-08 | [#10](https://github.com/clickbytes/kubik/issues/10) | #2 | open | planned | issue plan in #10 |
+| S1-01 | [#3](https://github.com/clickbytes/kubik/issues/3) | #2 | open | in_progress | stage1/worldgen / D:/Git/flows-worldgen |
+| S1-02 | [#4](https://github.com/clickbytes/kubik/issues/4) | #2 | open | in_progress | stage1/server and stage1/client / separate worktrees |
+| S1-03 | [#5](https://github.com/clickbytes/kubik/issues/5) | #2 | open | in_progress | stage1/worldgen / D:/Git/flows-worldgen |
+| S1-04 | [#6](https://github.com/clickbytes/kubik/issues/6) | #2 | open | in_progress | stage1/worldgen / D:/Git/flows-worldgen |
+| S1-05 | [#7](https://github.com/clickbytes/kubik/issues/7) | #2 | open | in_progress | stage1/client / D:/Git/flows-client |
+| S1-06 | [#8](https://github.com/clickbytes/kubik/issues/8) | #2 | open | in_progress | stage1/client / D:/Git/flows-client |
+| S1-07 | [#9](https://github.com/clickbytes/kubik/issues/9) | #2 | open | in_progress | stage1/client / D:/Git/flows-client |
+| S1-08 | [#10](https://github.com/clickbytes/kubik/issues/10) | #2 | open | planned | main / primary |
+
+## Active workers
+
+| Worker | Scope | Branch | Worktree | Next |
+|---|---|---|---|---|
+| native agent: worldgen | S1-01/03/04; `crates/worldgen/**` | stage1/worldgen | D:/Git/flows-worldgen | Native/WASM crate and checks |
+| native agent: server | S1-02; `apps/server/**` | stage1/server | D:/Git/flows-server | Axum endpoints and checks |
+| native agent: client | S1-02/05/06/07; `apps/client/**` | stage1/client | D:/Git/flows-client | Viewer, LOD, metrics, build |
+| coordinator | Integration/S1-08; root files | stage1/integration | D:/Git/flows | Review, benchmark, PRs, merge |
 
 ## Local state
 
 | Files | Git state | Related work |
 |---|---|---|
-| AGENTS.md, GITHUB.md, MAP.md, .gitignore | untracked | workflow and project map |
-| .github/ISSUE_TEMPLATE/*, .agents/skills/* | untracked | workflow and issue system |
+| Cargo.toml, README.md, .gitignore, GITHUB.md | modified/untracked | Stage 1 integration and checkpoint |
 
 ## Log
 
@@ -39,3 +47,4 @@ next: review the S1-00 baseline, commit local project map and workflow files, th
 | 2026-10-23 | Stage 1 planning | main / primary | Charter #1, epic #2, and tasks #3–#10 published. |
 | 2026-10-23 | Agent coordination | main / primary | Defined coordinator intake, worker assignment, OpenCode model selection, handoff, integration, and interruption flow in `AGENTS.md`. |
 | 2026-10-23 | S1-00 architecture | main / primary | Expanded #11 into the first Stage 1 task with a module/interface sketch; linked it from #2–#4 and `MAP.md`. |
+| 2026-10-23 | Stage 1 batch | main + three worktrees | Pushed baseline commit `9c76985`; assigned separate worldgen, server, and client branches. |
