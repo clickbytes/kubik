@@ -380,28 +380,89 @@ mod tests {
     }
 
     #[test]
-    fn matching_cube_face_edges_and_corners_are_identical() {
-        use std::collections::HashMap;
+    fn every_cube_edge_matches_in_both_directions() {
+        // L/R/B/T are u=-1/u=1/v=-1/v=1. The last field says whether the
+        // adjacent face traverses its edge in the opposite direction.
+        const PAIRS: [((u8, char), (u8, char), bool); 12] = [
+            ((0, 'L'), (4, 'R'), false),
+            ((0, 'R'), (5, 'L'), false),
+            ((0, 'B'), (3, 'R'), true),
+            ((0, 'T'), (2, 'R'), false),
+            ((1, 'L'), (5, 'R'), false),
+            ((1, 'R'), (4, 'L'), false),
+            ((1, 'B'), (3, 'L'), false),
+            ((1, 'T'), (2, 'L'), true),
+            ((2, 'B'), (4, 'T'), false),
+            ((2, 'T'), (5, 'T'), true),
+            ((3, 'B'), (5, 'B'), true),
+            ((3, 'T'), (4, 'B'), false),
+        ];
 
-        let mut shared = HashMap::new();
-        let mut duplicates = 0;
-        for face in 0..6 {
-            for t in [-1.0, 0.0, 1.0] {
-                for (u, v) in [(-1.0, t), (1.0, t), (t, -1.0), (t, 1.0)] {
-                    let direction = face_direction(face, u, v).unwrap();
-                    let key = direction.map(|axis| (axis * 1_000_000_000.0).round() as i64);
-                    let sample = sample_direction(17, 1, direction).unwrap();
-                    if let Some(previous) = shared.insert(key, sample) {
-                        assert_eq!(previous, sample, "face {face} at ({u}, {v})");
-                        duplicates += 1;
+        fn coordinates(edge: char, t: f64) -> (f64, f64) {
+            match edge {
+                'L' => (-1.0, t),
+                'R' => (1.0, t),
+                'B' => (t, -1.0),
+                'T' => (t, 1.0),
+                _ => unreachable!(),
+            }
+        }
+
+        for &((face_a, edge_a), (face_b, edge_b), reversed) in &PAIRS {
+            for ((source_face, source_edge), (target_face, target_edge)) in [
+                ((face_a, edge_a), (face_b, edge_b)),
+                ((face_b, edge_b), (face_a, edge_a)),
+            ] {
+                for step in -4..=4 {
+                    let t = f64::from(step) / 4.0;
+                    let (u1, v1) = coordinates(source_edge, t);
+                    let (u2, v2) = coordinates(target_edge, if reversed { -t } else { t });
+                    let direction_a = face_direction(source_face, u1, v1).unwrap();
+                    let direction_b = face_direction(target_face, u2, v2).unwrap();
+                    let quantize =
+                        |d: [f64; 3]| d.map(|axis| (axis * 1_000_000_000.0).round() as i64);
+                    assert_eq!(
+                        quantize(direction_a),
+                        quantize(direction_b),
+                        "faces {source_face}/{target_face} at t={t}"
+                    );
+                    for seed in [17, 12345] {
+                        assert_eq!(
+                            sample_direction(seed, 1, direction_a).unwrap(),
+                            sample_direction(seed, 1, direction_b).unwrap(),
+                            "seed {seed}, faces {source_face}/{target_face} at t={t}"
+                        );
                     }
                 }
             }
         }
-        assert!(
-            duplicates >= 24,
-            "expected all cube face edges and corners to overlap"
-        );
+    }
+
+    #[test]
+    fn all_eight_cube_corners_agree_across_three_faces() {
+        for sx in [-1.0, 1.0] {
+            for sy in [-1.0, 1.0] {
+                for sz in [-1.0, 1.0] {
+                    let x_face = if sx > 0.0 { FACE_POS_X } else { FACE_NEG_X };
+                    let y_face = if sy > 0.0 { FACE_POS_Y } else { FACE_NEG_Y };
+                    let z_face = if sz > 0.0 { FACE_POS_Z } else { FACE_NEG_Z };
+                    let directions = [
+                        face_direction(x_face, -sx * sz, sy).unwrap(),
+                        face_direction(y_face, sx, -sy * sz).unwrap(),
+                        face_direction(z_face, sz * sx, sy).unwrap(),
+                    ];
+                    for first in 0..3 {
+                        for second in 0..3 {
+                            assert_eq!(directions[first], directions[second]);
+                            assert_eq!(
+                                sample_direction(17, 1, directions[first]).unwrap(),
+                                sample_direction(17, 1, directions[second]).unwrap()
+                            );
+                        }
+                    }
+                }
+            }
+        }
     }
 
     #[test]

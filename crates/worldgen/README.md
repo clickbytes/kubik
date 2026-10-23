@@ -20,6 +20,23 @@ It returns `(resolution+1)^2` vertices, row-major in local `v` then `u`, with fo
 
 Face IDs are 0 `+X`, 1 `-X`, 2 `+Y`, 3 `-Y`, 4 `+Z`, 5 `-Z`. With local coordinates `u,v` in `[-1,1]`, cube positions are `(1,v,-u)`, `(-1,v,u)`, `(u,1,-v)`, `(u,-1,v)`, `(u,v,1)`, and `(-u,v,-1)` respectively. Normalize the cube position to obtain the spherical direction. For a quadtree tile at `level`, local grid position is `u=-1+2*(tile_x+grid_x/resolution)/2^level`, and likewise for `v`.
 
+The twelve shared face edges are below. `L/R/B/T` mean `u=-1/u=1/v=-1/v=1`. A reversed edge uses `-t` on the neighbor when the first edge uses `t`.
+
+| Face edge | Neighbor edge | Reversed |
+|---|---|---|
+| +X L | +Z R | No |
+| +X R | -Z L | No |
+| +X B | -Y R | Yes |
+| +X T | +Y R | No |
+| -X L | -Z R | No |
+| -X R | +Z L | No |
+| -X B | -Y L | No |
+| -X T | +Y L | Yes |
+| +Y B | +Z T | No |
+| +Y T | -Z T | Yes |
+| -Y B | -Z B | Yes |
+| -Y T | +Z B | No |
+
 ## Native checks
 
 Run `cargo test --manifest-path crates/worldgen/Cargo.toml`. The native API is `generate_chunk(...) -> Result<Vec<i32>, WorldgenError>` and `sample_direction(...) -> Result<Sample, WorldgenError>`. Fixed seeds exercise repeatability, face edges/corners, same-face neighboring chunks, LOD samples, value ranges, and error handling.
