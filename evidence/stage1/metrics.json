@@ -12,33 +12,39 @@
     "Triangles": "70,400",
     "Chunks": "110 visible · 116 cached",
     "Pending chunks": "0",
-    "Last chunk generation": "0.3 ms",
-    "Chunk generation p95": "0.4 ms",
-    "Browser memory": "7.9 MiB JS heap"
+    "Last chunk generation": "0.2 ms",
+    "Chunk generation p95": "0.5 ms",
+    "Browser memory": "8.3 MiB JS heap",
+    "selectedIdsCount": 110,
+    "selectedIdsSha256": "cae41b36bcf6623c1541b92d52bd51219966646850f1db6738cf8e347ed1cf74"
   },
   "middle": {
     "Ground clearance": "364 km",
     "Surface elevation": "1.34 km",
     "FPS": "144",
-    "Frame time p95": "7.1 ms",
+    "Frame time p95": "7.0 ms",
     "Triangles": "44,160",
     "Chunks": "147 visible · 220 cached",
     "Pending chunks": "0",
     "Last chunk generation": "0.2 ms",
-    "Chunk generation p95": "0.3 ms",
-    "Browser memory": "14.6 MiB JS heap"
+    "Chunk generation p95": "0.4 ms",
+    "Browser memory": "15.5 MiB JS heap",
+    "selectedIdsCount": 147,
+    "selectedIdsSha256": "df4338539a9b67d9a416680b08a0d79bdc34ed40849780ffdfdfb24e9624fe47"
   },
   "faceTransition": {
     "Ground clearance": "364 km",
     "Surface elevation": "0.00 km",
     "FPS": "144",
-    "Frame time p95": "7.1 ms",
+    "Frame time p95": "7.0 ms",
     "Triangles": "44,800",
     "Chunks": "149 visible · 220 cached",
     "Pending chunks": "0",
-    "Last chunk generation": "0.3 ms",
+    "Last chunk generation": "0.2 ms",
     "Chunk generation p95": "0.3 ms",
-    "Browser memory": "19.0 MiB JS heap"
+    "Browser memory": "21.1 MiB JS heap",
+    "selectedIdsCount": 149,
+    "selectedIdsSha256": "bf498e4f56ff173643a37629f4c8f16df1d923788bc4ccd85f125f61e5d774e5"
   },
   "ground": {
     "Ground clearance": "0.08 km",
@@ -48,21 +54,25 @@
     "Triangles": "3,840",
     "Chunks": "6 visible · 220 cached",
     "Pending chunks": "0",
-    "Last chunk generation": "0.2 ms",
-    "Chunk generation p95": "0.3 ms",
-    "Browser memory": "19.5 MiB JS heap"
+    "Last chunk generation": "0.4 ms",
+    "Chunk generation p95": "0.4 ms",
+    "Browser memory": "9.3 MiB JS heap",
+    "selectedIdsCount": 6,
+    "selectedIdsSha256": "4d66836b4e948535131cc1fcfaeecc831ee5ae7a08f1f295751ba4c07e2ae363"
   },
   "groundDragged": {
     "Ground clearance": "0.08 km",
     "Surface elevation": "1.93 km",
     "FPS": "144",
-    "Frame time p95": "7.1 ms",
+    "Frame time p95": "7.0 ms",
     "Triangles": "2,560",
     "Chunks": "4 visible · 220 cached",
     "Pending chunks": "0",
     "Last chunk generation": "0.2 ms",
-    "Chunk generation p95": "0.4 ms",
-    "Browser memory": "9.3 MiB JS heap"
+    "Chunk generation p95": "0.3 ms",
+    "Browser memory": "11.5 MiB JS heap",
+    "selectedIdsCount": 4,
+    "selectedIdsSha256": "0820fe5a5172cc8e8f95fe39f65cbba7ad9d14e00d3d1ed77b7fc5b198efcfe0"
   },
   "orbitReloaded": {
     "Ground clearance": "3022 km",
@@ -72,9 +82,11 @@
     "Triangles": "70,400",
     "Chunks": "110 visible · 116 cached",
     "Pending chunks": "0",
-    "Last chunk generation": "0.3 ms",
+    "Last chunk generation": "0.2 ms",
     "Chunk generation p95": "0.6 ms",
-    "Browser memory": "9.3 MiB JS heap"
+    "Browser memory": "9.8 MiB JS heap",
+    "selectedIdsCount": 110,
+    "selectedIdsSha256": "cae41b36bcf6623c1541b92d52bd51219966646850f1db6738cf8e347ed1cf74"
   },
   "errors": []
 }

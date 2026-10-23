@@ -34,6 +34,7 @@ export interface ChunkMetrics {
   visible: number;
   cached: number;
   queued: number;
+  selectedIds: string[];
   triangles: number;
   generationMs: number;
   generationP95Ms: number | null;
@@ -72,6 +73,7 @@ export class ChunkManager {
       visible: this.visibleCount,
       cached: this.cache.size,
       queued: this.queue.length,
+      selectedIds: this.desired.map(tileKey).sort(),
       triangles: this.triangleCount,
       generationMs: this.generationMs,
       generationP95Ms: this.generationTimes.p95(),

@@ -134,6 +134,7 @@ async function start(): Promise<void> {
     }
     if (now - lastMetrics >= 500) {
       const values = chunks.metrics();
+      metrics!.dataset.chunkIds = values.selectedIds.join(',');
       const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
       const memoryText = memory ? `${(memory.usedJSHeapSize / 1048576).toFixed(1)} MiB JS heap` : 'unavailable';
       const altitude = clearanceKm;
