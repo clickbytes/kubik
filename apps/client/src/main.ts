@@ -1,5 +1,6 @@
 import { AmbientLight, Color, DirectionalLight, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { ChunkManager } from './chunks';
+import { tileAtDirection, tileKey } from './planet';
 import { loadSampler, loadWorldConfig } from './worldgen';
 import './styles.css';
 
@@ -34,7 +35,9 @@ async function start(): Promise<void> {
   const chunks = new ChunkManager(scene, sampler, config);
   let longitude = 0.3;
   let latitude = 0.38;
-  let distance = radius * 2.5;
+  let clearanceKm = radius * 1.5;
+  let sampledTile = '';
+  let sampledSurfaceKm = 0;
   let dragging = false;
   let lastX = 0;
   let lastY = 0;
@@ -66,12 +69,14 @@ async function start(): Promise<void> {
   });
   canvas!.addEventListener('wheel', event => {
     event.preventDefault();
-    distance = Math.max(radius + 0.05, Math.min(radius * 5, distance * Math.exp(event.deltaY * 0.001)));
+    const surfaceRadius = radius + sampledSurfaceKm;
+    const zoomedDistance = (surfaceRadius + clearanceKm) * Math.exp(event.deltaY * 0.001);
+    clearanceKm = Math.max(0.08, Math.min(radius * 4, zoomedDistance - surfaceRadius));
   }, { passive: false });
   canvas!.addEventListener('dblclick', () => {
     longitude = 0.3;
     latitude = 0.38;
-    distance = radius * 2.5;
+    clearanceKm = radius * 1.5;
   });
 
   setStatus(`Seed ${config.seed} · generator v${config.generator_version} · ${radius.toFixed(1)} km radius`);
@@ -90,13 +95,26 @@ async function start(): Promise<void> {
       Math.sin(latitude),
       Math.cos(latitude) * Math.sin(longitude),
     );
+    // Sample a small patch around the camera's radial ground point. Its
+    // highest vertex is a conservative surface for collision clearance.
+    const surfaceTile = tileAtDirection(direction, 17);
+    const surfaceKey = tileKey(surfaceTile);
+    if (surfaceKey !== sampledTile) {
+      const samples = sampler.sample_chunk(Number(config.seed), config.generator_version,
+        surfaceTile.face, surfaceTile.level, surfaceTile.x, surfaceTile.y, 4);
+      let highestMetres = config.planet.sea_level_m;
+      for (let i = 0; i < samples.length; i += 4) highestMetres = Math.max(highestMetres, samples[i]!);
+      sampledSurfaceKm = highestMetres / 1000;
+      sampledTile = surfaceKey;
+    }
+    const distance = radius + sampledSurfaceKm + clearanceKm;
     camera.position.copy(direction.multiplyScalar(distance));
     camera.lookAt(0, 0, 0);
     // Near plane tracks altitude so ground zoom has depth precision without clipping.
-    camera.near = Math.max(0.005, Math.min(1, (distance - radius) / 20));
+    camera.near = Math.max(0.005, Math.min(1, clearanceKm / 20));
     camera.updateProjectionMatrix();
     try {
-      chunks.update(camera.position, window.innerHeight, camera.fov, now);
+      chunks.update(camera.position, radius + sampledSurfaceKm, window.innerWidth, window.innerHeight, camera.fov, now);
       renderer.render(scene, camera);
     } catch (error) {
       halted = true;
@@ -113,9 +131,10 @@ async function start(): Promise<void> {
       const values = chunks.metrics();
       const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
       const memoryText = memory ? `${(memory.usedJSHeapSize / 1048576).toFixed(1)} MiB JS heap` : 'unavailable';
-      const altitude = Math.max(0, distance - radius);
+      const altitude = clearanceKm;
       metrics!.innerHTML = `
-        <div><span>Altitude</span><b>${altitude.toFixed(altitude < 1 ? 2 : 0)} km</b></div>
+        <div><span>Ground clearance</span><b>${altitude.toFixed(altitude < 1 ? 2 : 0)} km</b></div>
+        <div><span>Surface elevation</span><b>${sampledSurfaceKm.toFixed(2)} km</b></div>
         <div><span>FPS</span><b>${fps.toFixed(0)}</b></div>
         <div><span>Triangles</span><b>${renderer.info.render.triangles.toLocaleString()}</b></div>
         <div><span>Chunks</span><b>${values.visible} visible · ${values.cached} cached</b></div>

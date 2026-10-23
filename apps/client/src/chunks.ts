@@ -53,9 +53,9 @@ export class ChunkManager {
     private readonly config: WorldConfig,
   ) {}
 
-  update(cameraPosition: Vector3, viewportHeight: number, fovDegrees: number, now: number): void {
+  update(cameraPosition: Vector3, localSurfaceRadius: number, viewportWidth: number, viewportHeight: number, fovDegrees: number, now: number): void {
     if (now - this.lastPlan > 120 || this.desired.length === 0) {
-      this.desired = planVisibleTiles(cameraPosition, this.config.planet.radius_km, viewportHeight, fovDegrees);
+      this.desired = planVisibleTiles(cameraPosition, localSurfaceRadius, viewportWidth, viewportHeight, fovDegrees);
       this.lastPlan = now;
       this.queue = this.buildQueue(cameraPosition);
     }
@@ -160,32 +160,55 @@ export class ChunkManager {
   }
 }
 
-function planVisibleTiles(cameraPosition: Vector3, radius: number, viewportHeight: number, fovDegrees: number): Tile[] {
-  const leaves: Tile[] = [];
+function planVisibleTiles(cameraPosition: Vector3, radius: number, viewportWidth: number, viewportHeight: number, fovDegrees: number): Tile[] {
+  const leaves: Array<{ tile: Tile; pixels: number }> = [];
   const distance = cameraPosition.length();
   const cameraDirection = cameraPosition.clone().normalize();
+  const cameraForward = cameraDirection.clone().negate();
   const horizonAngle = distance > radius ? Math.acos(Math.min(1, radius / distance)) : 0;
   const focalPixels = viewportHeight / (2 * Math.tan(fovDegrees * Math.PI / 360));
+  const halfDiagonalFov = Math.atan(Math.tan(fovDegrees * Math.PI / 360)
+    * Math.hypot(1, viewportWidth / viewportHeight));
 
-  function visit(tile: Tile): void {
+  function projectedSize(tile: Tile): number | null {
     const centre = tileCentre(tile);
     const angularRadius = tileAngularRadius(tile);
-    if (cameraDirection.angleTo(centre) > horizonAngle + angularRadius + 0.03) return;
+    if (cameraDirection.angleTo(centre) > horizonAngle + angularRadius + 0.03) return null;
     const surfacePoint = centre.clone().multiplyScalar(radius);
     const toSurface = Math.max(0.01, cameraPosition.distanceTo(surfacePoint));
     const span = 2 * radius * Math.sin(angularRadius);
-    const projectedPixels = span * focalPixels / toSurface;
-    if (tile.level < MAX_LEVEL && projectedPixels > PIXELS_PER_TILE && leaves.length + 4 < MAX_VISIBLE) {
-      const children = childTiles(tile).sort((a, b) =>
-        cameraPosition.distanceToSquared(tileCentre(a).multiplyScalar(radius))
-        - cameraPosition.distanceToSquared(tileCentre(b).multiplyScalar(radius)));
-      for (const child of children) visit(child);
-    } else {
-      leaves.push(tile);
-    }
+    const coneRadius = Math.atan2(span / 2, toSurface);
+    const toTile = surfacePoint.sub(cameraPosition);
+    if (cameraForward.angleTo(toTile) > halfDiagonalFov + coneRadius + 0.12) return null;
+    return span * focalPixels / toSurface;
   }
-  for (let face = 0; face < 6; face++) visit({ face: face as Face, level: 0, x: 0, y: 0 });
-  return leaves;
+  for (let face = 0; face < 6; face++) {
+    const tile: Tile = { face: face as Face, level: 0, x: 0, y: 0 };
+    const pixels = projectedSize(tile);
+    if (pixels !== null) leaves.push({ tile, pixels });
+  }
+  // Refine the largest on-screen tile first. Count only children that actually
+  // intersect the view, so culling never consumes the leaf budget.
+  while (true) {
+    let best = -1;
+    let largest = PIXELS_PER_TILE;
+    for (let i = 0; i < leaves.length; i++) {
+      if (leaves[i]!.tile.level < MAX_LEVEL && leaves[i]!.pixels > largest) {
+        best = i;
+        largest = leaves[i]!.pixels;
+      }
+    }
+    if (best < 0) break;
+    const children = childTiles(leaves[best]!.tile)
+      .map(tile => ({ tile, pixels: projectedSize(tile) }))
+      .filter((entry): entry is { tile: Tile; pixels: number } => entry.pixels !== null);
+    if (leaves.length - 1 + children.length > MAX_VISIBLE) {
+      leaves[best]!.pixels = 0;
+      continue;
+    }
+    leaves.splice(best, 1, ...children);
+  }
+  return leaves.map(entry => entry.tile);
 }
 
 function buildTileMesh(tile: Tile, config: WorldConfig, sampler: Sampler, material: MeshLambertMaterial): Mesh {
