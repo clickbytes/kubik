@@ -45,7 +45,7 @@ export class ChunkManager {
   private generationMs = 0;
   private visibleCount = 0;
   private triangleCount = 0;
-  private readonly material = new MeshLambertMaterial({ vertexColors: true, side: DoubleSide });
+  private readonly material = new MeshLambertMaterial({ vertexColors: true, flatShading: true, side: DoubleSide });
 
   constructor(
     private readonly scene: Scene,
