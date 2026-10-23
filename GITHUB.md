@@ -2,40 +2,42 @@
 
 repo: clickbytes/kubik
 checked_utc: 2026-10-23
-stage: Stage 1 (#2)
-source_of_truth: GitHub issues
-integration: stage1/integration @ e9ce866; PR pending
-next: open PR, pass Windows/Linux CI, merge, record acceptance, close completed issues
-
-## Work locations
-
-| Branch | Worktree | Scope | State |
-|---|---|---|---|
-| main | D:/Git/flows (base) | Baseline workflow | origin/main @ 9c76985 |
-| stage1/integration | D:/Git/flows | Integration, tests, acceptance | ready for PR |
-| stage1/worldgen | D:/Git/flows-worldgen | S1-01/03/04 | merged locally |
-| stage1/server | D:/Git/flows-server | S1-02/08 | merged locally |
-| stage1/client | D:/Git/flows-client | S1-05/06/07 | merged locally |
+branch: main
+merged_commit: 4f340fb (PR #12)
+worktree: D:/Git/flows (primary)
+stage: Stage 1 complete; later stages unapproved
+next: await a new approved stage or issue; resume from main and reconcile GitHub issues
 
 ## Issues
 
-| ID | Issue | State | Evidence |
-|---|---|---|---|
-| Charter | [#1](https://github.com/clickbytes/kubik/issues/1) | open | Project direction |
-| Stage 1 | [#2](https://github.com/clickbytes/kubik/issues/2) | integration | Child tasks below |
-| S1-00 | [#11](https://github.com/clickbytes/kubik/issues/11) | review | Target architecture in issue |
-| S1-01 | [#3](https://github.com/clickbytes/kubik/issues/3) | review | World contract in issue |
-| S1-02 | [#4](https://github.com/clickbytes/kubik/issues/4) | review | Server, client, CI |
-| S1-03 | [#5](https://github.com/clickbytes/kubik/issues/5) | review | Native/WASM fixtures |
-| S1-04 | [#6](https://github.com/clickbytes/kubik/issues/6) | review | Terrain fields and screenshots |
-| S1-05 | [#7](https://github.com/clickbytes/kubik/issues/7) | review | Browser camera captures |
-| S1-06 | [#8](https://github.com/clickbytes/kubik/issues/8) | review | Seam tests, LOD captures |
-| S1-07 | [#9](https://github.com/clickbytes/kubik/issues/9) | review | Browser metrics |
-| S1-08 | [#10](https://github.com/clickbytes/kubik/issues/10) | review | Container profile, acceptance report pending |
+| Item | GitHub | State |
+|---|---|---|
+| Charter | [#1](https://github.com/clickbytes/kubik/issues/1) | open; later scope remains proposed |
+| Stage 1 epic | [#2](https://github.com/clickbytes/kubik/issues/2) | closed; acceptance report linked |
+| S1-00 architecture | [#11](https://github.com/clickbytes/kubik/issues/11) | closed |
+| S1-01 contract | [#3](https://github.com/clickbytes/kubik/issues/3) | closed |
+| S1-02 bootstrap | [#4](https://github.com/clickbytes/kubik/issues/4) | closed |
+| S1-03 worldgen | [#5](https://github.com/clickbytes/kubik/issues/5) | closed |
+| S1-04 terrain | [#6](https://github.com/clickbytes/kubik/issues/6) | closed |
+| S1-05 viewer | [#7](https://github.com/clickbytes/kubik/issues/7) | closed |
+| S1-06 LOD | [#8](https://github.com/clickbytes/kubik/issues/8) | closed |
+| S1-07 metrics | [#9](https://github.com/clickbytes/kubik/issues/9) | closed |
+| S1-08 acceptance | [#10](https://github.com/clickbytes/kubik/issues/10) | closed |
 
-## Checkpoint
+## Work locations
+
+| Branch | Worktree | Status |
+|---|---|---|
+| main | D:/Git/flows | active; PR #12 merged |
+| stage1/integration | branch retained, primary worktree switched to main | merged; inactive |
+| stage1/worldgen | D:/Git/flows-worldgen | merged; inactive worktree retained |
+| stage1/server | D:/Git/flows-server | merged; inactive worktree retained |
+| stage1/client | D:/Git/flows-client | merged; inactive worktree retained |
+
+## Log
 
 | Date | Result |
 |---|---|
-| 2026-10-23 | Three worker branches integrated; Rust tests, native/WASM parity, production browser smoke, stack startup, and 1-CPU/300-MB server profile passed locally. |
-| 2026-10-23 | Planet scale and desktop Chrome reference confirmed by user. Browser evidence saved in `evidence/stage1/`. |
+| 2026-10-23 | [PR #12](https://github.com/clickbytes/kubik/pull/12) merged as 4f340fb. Final Windows/Linux [CI run](https://github.com/clickbytes/kubik/actions/runs/39977746918) passed. |
+| 2026-10-23 | [Chrome evidence](evidence/stage1/metrics.json): production preview, 144 FPS, frame p95 <=7.1 ms, chunk p95 <=0.6 ms; selected orbit IDs identical after reload. |
+| 2026-10-23 | Server Stage 1 HTTP profile: 1 CPU, 300 MB container, 1,000 requests, cgroup peak 5,914,624 bytes. Full method and scope: [S1-08 #10](https://github.com/clickbytes/kubik/issues/10). |
