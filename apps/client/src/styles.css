@@ -12,3 +12,4 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
 #metrics div { display: flex; justify-content: space-between; border-top: 1px solid #ffffff18; padding: 2px 0; }
 #metrics b { font-weight: 500; }
 #hud p { color: #91a7b3; margin: 12px 0 0; }
+#hud p.targets { color: #b6c9d2; margin-top: 10px; }

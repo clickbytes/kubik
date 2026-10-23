@@ -3,6 +3,7 @@ import {
   Scene, Uint16BufferAttribute, Vector3,
 } from 'three';
 import { childTiles, faceDirection, parentTile, tileAngularRadius, tileCentre, tileKey, tileUv, type Face, type Tile } from './planet';
+import { RollingSamples } from './rolling-samples';
 import type { Sampler, WorldConfig } from './worldgen';
 
 const RESOLUTION = 16;
@@ -35,6 +36,7 @@ export interface ChunkMetrics {
   queued: number;
   triangles: number;
   generationMs: number;
+  generationP95Ms: number | null;
 }
 
 export class ChunkManager {
@@ -43,6 +45,7 @@ export class ChunkManager {
   private queue: Tile[] = [];
   private lastPlan = 0;
   private generationMs = 0;
+  private readonly generationTimes = new RollingSamples(120);
   private visibleCount = 0;
   private triangleCount = 0;
   private readonly material = new MeshLambertMaterial({ vertexColors: true, flatShading: true, side: DoubleSide });
@@ -71,6 +74,7 @@ export class ChunkManager {
       queued: this.queue.length,
       triangles: this.triangleCount,
       generationMs: this.generationMs,
+      generationP95Ms: this.generationTimes.p95(),
     };
   }
 
@@ -108,6 +112,7 @@ export class ChunkManager {
       const before = performance.now();
       const mesh = buildTileMesh(tile, this.config, this.sampler, this.material);
       this.generationMs = performance.now() - before;
+      this.generationTimes.add(this.generationMs);
       mesh.visible = false;
       this.scene.add(mesh);
       const triangles = (mesh.geometry.getIndex()?.count ?? 0) / 3;

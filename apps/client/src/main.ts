@@ -1,6 +1,7 @@
 import { AmbientLight, Color, DirectionalLight, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { ChunkManager } from './chunks';
 import { tileAtDirection, tileKey } from './planet';
+import { RollingSamples } from './rolling-samples';
 import { loadSampler, loadWorldConfig } from './worldgen';
 import './styles.css';
 
@@ -81,6 +82,8 @@ async function start(): Promise<void> {
 
   setStatus(`Seed ${config.seed} · generator v${config.generator_version} · ${radius.toFixed(1)} km radius`);
   const startTime = performance.now();
+  const frameTimes = new RollingSamples(120);
+  let previousFrame = 0;
   let frameCount = 0;
   let fps = 0;
   let fpsStart = startTime;
@@ -90,6 +93,8 @@ async function start(): Promise<void> {
   function animate(now: number): void {
     if (halted) return;
     requestAnimationFrame(animate);
+    if (previousFrame > 0 && now - previousFrame < 1000) frameTimes.add(now - previousFrame);
+    previousFrame = now;
     const direction = new Vector3(
       Math.cos(latitude) * Math.cos(longitude),
       Math.sin(latitude),
@@ -132,14 +137,18 @@ async function start(): Promise<void> {
       const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
       const memoryText = memory ? `${(memory.usedJSHeapSize / 1048576).toFixed(1)} MiB JS heap` : 'unavailable';
       const altitude = clearanceKm;
+      const frameP95 = frameTimes.p95();
+      const generationP95 = values.generationP95Ms;
       metrics!.innerHTML = `
         <div><span>Ground clearance</span><b>${altitude.toFixed(altitude < 1 ? 2 : 0)} km</b></div>
         <div><span>Surface elevation</span><b>${sampledSurfaceKm.toFixed(2)} km</b></div>
         <div><span>FPS</span><b>${fps.toFixed(0)}</b></div>
+        <div><span>Frame time p95</span><b>${frameP95 === null ? 'unavailable' : `${frameP95.toFixed(1)} ms`}</b></div>
         <div><span>Triangles</span><b>${renderer.info.render.triangles.toLocaleString()}</b></div>
         <div><span>Chunks</span><b>${values.visible} visible · ${values.cached} cached</b></div>
         <div><span>Pending chunks</span><b>${values.queued}</b></div>
         <div><span>Last chunk generation</span><b>${values.generationMs.toFixed(1)} ms</b></div>
+        <div><span>Chunk generation p95</span><b>${generationP95 === null ? 'unavailable' : `${generationP95.toFixed(1)} ms`}</b></div>
         <div><span>Browser memory</span><b>${memoryText}</b></div>`;
       lastMetrics = now;
     }
