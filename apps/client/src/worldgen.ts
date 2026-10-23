@@ -44,11 +44,13 @@ function isWorldConfig(value: unknown): value is WorldConfig {
 
 export async function loadSampler(): Promise<Sampler> {
   // wasm-pack --target web writes these artifacts to public/worldgen.
-  const moduleUrl = '/worldgen/worldgen.js';
+  // A URL computed at runtime keeps Vite from treating wasm-pack's generated
+  // public module as an application source import during dev transforms.
+  const moduleUrl = new URL('worldgen/worldgen.js', document.baseURI).href;
   let module: WorldgenModule;
   try {
     module = await import(/* @vite-ignore */ moduleUrl) as WorldgenModule;
-    await module.default('/worldgen/worldgen_bg.wasm');
+    await module.default(new URL('worldgen/worldgen_bg.wasm', document.baseURI).href);
   } catch (error) {
     throw new Error(`World generator WASM is unavailable. Run npm run build:worldgen. ${String(error)}`);
   }
