@@ -41,4 +41,6 @@ The twelve shared face edges are below. `L/R/B/T` mean `u=-1/u=1/v=-1/v=1`. A re
 
 Run `cargo test --manifest-path crates/worldgen/Cargo.toml`. The native API is `generate_chunk(...) -> Result<Vec<i32>, WorldgenError>` and `sample_direction(...) -> Result<Sample, WorldgenError>`. Fixed seeds exercise repeatability, face edges/corners, same-face neighboring chunks, LOD samples, value ranges, and error handling.
 
+The native test includes a small version-1 golden fixture: the six face-center samples and one mountain corner for seed 12345. If an intentional terrain change alters these packed values, increment the generator version and update the fixture rather than silently changing a persisted world's base terrain.
+
 For byte-for-byte native/WASM fixture comparison in Node, run `wasm-pack build crates/worldgen --target nodejs --out-dir pkg-node` and then `node crates/worldgen/tests/compare_wasm.cjs` from the repository root. The comparison executes the native fixture example, calls the WASM export with the same inputs, and compares every interleaved little-endian `i32` output byte. Generated packages and standalone crate build output are ignored.

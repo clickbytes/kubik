@@ -345,6 +345,27 @@ mod tests {
     }
 
     #[test]
+    fn version_one_golden_samples_remain_stable() {
+        // A change to these packed fields needs a new generator version; the
+        // same seed/version must never silently produce a different world.
+        const CENTERS: [[i32; SAMPLE_STRIDE]; 6] = [
+            [-3887, 882, 351, 0],
+            [-2029, 923, 629, 0],
+            [1999, 91, 297, 5],
+            [-987, 147, 392, 0],
+            [-1513, 822, 284, 0],
+            [-2877, 837, 593, 0],
+        ];
+        for (face, expected) in CENTERS.into_iter().enumerate() {
+            let chunk = generate_chunk(12345, GENERATOR_VERSION, face as u8, 0, 0, 0, 4).unwrap();
+            assert_eq!(vertex(&chunk, 4, 2, 2), expected, "face {face} center");
+            if face == usize::from(FACE_POS_Z) {
+                assert_eq!(vertex(&chunk, 4, 0, 0), [3628, 297, 115, 6]);
+            }
+        }
+    }
+
+    #[test]
     fn rejects_unknown_version_and_invalid_chunk() {
         assert_eq!(
             generate_chunk(1, 99, 0, 0, 0, 0, 1),
