@@ -1,0 +1,27 @@
+# Worldgen crate
+
+Version 1 samples terrain directly from a seed and a unit spherical direction. The proposed client/server configuration is:
+
+```json
+{"seed":"12345","generator_version":1,"planet":{"radius_km":2014.6,"sea_level_m":0}}
+```
+
+The radius is a provisional 1/10 Earth surface-area interpretation; it is used by the renderer, not by the terrain noise. S1-01 must approve the scale and numeric acceptance contract. Height is in metres relative to sea level zero. The server can publish the seed as a string while the browser parses it as a `u32` for the version-1 API.
+
+## Browser API
+
+Build with `wasm-pack build crates/worldgen --target web --out-dir pkg-web` from the repository root, after installing the `wasm32-unknown-unknown` target. The generated module exports:
+
+```text
+sample_chunk(seed, generator_version, face, level, tile_x, tile_y, resolution) -> Int32Array
+```
+
+It returns `(resolution+1)^2` vertices, row-major in local `v` then `u`, with four interleaved `i32` values per vertex: `[height_m, temperature_q, moisture_q, biome_id]`. Temperature and moisture are relative fields quantized from 0 to 1000. Biomes: 0 ocean, 1 coast, 2 desert, 3 grassland, 4 forest, 5 tundra, 6 mountain, 7 snow. Invalid face/tile/resolution/version raises a JavaScript error.
+
+Face IDs are 0 `+X`, 1 `-X`, 2 `+Y`, 3 `-Y`, 4 `+Z`, 5 `-Z`. With local coordinates `u,v` in `[-1,1]`, cube positions are `(1,v,-u)`, `(-1,v,u)`, `(u,1,-v)`, `(u,-1,v)`, `(u,v,1)`, and `(-u,v,-1)` respectively. Normalize the cube position to obtain the spherical direction. For a quadtree tile at `level`, local grid position is `u=-1+2*(tile_x+grid_x/resolution)/2^level`, and likewise for `v`.
+
+## Native checks
+
+Run `cargo test --manifest-path crates/worldgen/Cargo.toml`. The native API is `generate_chunk(...) -> Result<Vec<i32>, WorldgenError>` and `sample_direction(...) -> Result<Sample, WorldgenError>`. Fixed seeds exercise repeatability, face edges/corners, same-face neighboring chunks, LOD samples, value ranges, and error handling.
+
+For byte-for-byte native/WASM fixture comparison in Node, run `wasm-pack build crates/worldgen --target nodejs --out-dir pkg-node` and then `node crates/worldgen/tests/compare_wasm.cjs` from the repository root. The comparison executes the native fixture example, calls the WASM export with the same inputs, and compares every interleaved little-endian `i32` output byte. Generated packages and standalone crate build output are ignored.
