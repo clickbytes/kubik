@@ -1,0 +1,90 @@
+name: Bug
+description: Report a reproducible defect with deterministic fix criteria.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Write in English. Every sentence must be a verifiable requirement with a completion condition or a bounded factual statement with evidence. Provide reproducible facts. Each acceptance criterion must define an observable fixed behavior.
+  - type: textarea
+    id: parent
+    attributes:
+      label: Parent epic or related issue
+      description: Link the parent or related issue, or write None.
+      placeholder: "#123 or None"
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: State what happens and the exact conditions under which it happens.
+      placeholder: "When ..., the application ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: State the observable behavior expected under the same conditions.
+      placeholder: "When ..., the application ..."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: List the shortest deterministic steps that reproduce the defect.
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Record relevant OS, version, configuration, and input data. Write None for irrelevant fields.
+      placeholder: "- OS: ...\n- Version: ...\n- Configuration: ..."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Fix acceptance criteria
+      description: One atomic, observable, independently verifiable fixed condition per checkbox.
+      placeholder: "- [ ] ...\n- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Fix scope and non-goals
+      description: Define the affected behavior and explicit exclusions.
+      placeholder: "In scope:\n- ...\nOut of scope:\n- ..."
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and blockers
+      description: Link required issues or decisions. Write None if there are none.
+      placeholder: "- None"
+    validations:
+      required: true
+  - type: textarea
+    id: branch_plan
+    attributes:
+      label: Branch plan
+      description: >-
+        Specify exactly one plan: `existing: <branch>` or `create: <branch-name>`. Use `TBD` only for planning; resolve before implementation.
+      placeholder: "existing: main"
+    validations:
+      required: true
+  - type: textarea
+    id: worktree_plan
+    attributes:
+      label: Worktree plan
+      description: >-
+        Specify exactly one plan: `main`, `existing: <worktree-name>`, or `create: <repository-relative-path>`. Use `TBD` only for planning; resolve before implementation.
+      placeholder: "main"
+    validations:
+      required: true

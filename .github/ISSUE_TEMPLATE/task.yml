@@ -1,0 +1,74 @@
+name: Task
+description: Specify one bounded implementation or documentation task.
+title: "[Task] "
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Write in English. Every sentence must be a verifiable requirement with a completion condition or a bounded factual statement with evidence. Keep this issue bounded. Each acceptance criterion must state one observable result and how completion is verified.
+  - type: textarea
+    id: parent
+    attributes:
+      label: Parent epic
+      description: Link the parent epic, or write None for a standalone task.
+      placeholder: "#123 or None"
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: State the deliverable and its intended result.
+      placeholder: "Implement/document ... so that ..."
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant context
+      description: Include only facts, decisions, and links that affect the task. Write None if there is no additional context.
+      placeholder: "- ..."
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and non-goals
+      description: Define what is included and excluded.
+      placeholder: "In scope:\n- ...\nOut of scope:\n- ..."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: One atomic, observable, independently verifiable condition per checkbox. Avoid subjective or undefined wording.
+      placeholder: "- [ ] Given ..., when ..., then ...\n- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and blockers
+      description: Link required issues or decisions. Write None if there are none.
+      placeholder: "- None"
+    validations:
+      required: true
+  - type: textarea
+    id: branch_plan
+    attributes:
+      label: Branch plan
+      description: >-
+        Specify exactly one plan: `existing: <branch>` or `create: <branch-name>`. Use `TBD` only for planning; resolve before implementation.
+      placeholder: "existing: main"
+    validations:
+      required: true
+  - type: textarea
+    id: worktree_plan
+    attributes:
+      label: Worktree plan
+      description: >-
+        Specify exactly one plan: `main`, `existing: <worktree-name>`, or `create: <repository-relative-path>`. Use `TBD` only for planning; resolve before implementation.
+      placeholder: "main"
+    validations:
+      required: true

@@ -1,0 +1,48 @@
+name: Epic
+description: Define a measurable project outcome and its issue breakdown.
+title: "[Epic] "
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        Write in English. Each sentence must state a verifiable condition or bounded fact with evidence. Make each requirement precise. Track implementation branches and worktrees on child task issues.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: State the single project outcome this epic must deliver and who or what benefits.
+      placeholder: "When this epic is complete, ..."
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and non-goals
+      description: List included outcomes and explicit exclusions. Each bullet must be unambiguous.
+      placeholder: "In scope:\n- ...\nOut of scope:\n- ..."
+    validations:
+      required: true
+  - type: textarea
+    id: exit_criteria
+    attributes:
+      label: Epic completion criteria
+      description: One observable, independently verifiable completion condition per checkbox.
+      placeholder: "- [ ] ...\n- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: child_issues
+    attributes:
+      label: Child issues
+      description: Link each child issue and state its dependency or ordering, if any. Use TBD only before breakdown is complete.
+      placeholder: "- #123 — ... — depends on: none"
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: External dependencies and decisions
+      description: List required inputs or decisions and who or what provides them. Write None if there are none.
+      placeholder: "- None"
+    validations:
+      required: true
