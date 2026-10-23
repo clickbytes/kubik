@@ -52,6 +52,8 @@ try {
     assert.ok(Number(chunkMatch[1]) <= 150, `${name}: visible chunk limit exceeded`);
     assert.ok(Number(chunkMatch[2]) <= 220, `${name}: cache limit exceeded`);
     assert.ok(Number(values.FPS) >= minFps, `${name}: FPS below ${minFps}`);
+    assert.ok(Number.parseFloat(values['Chunk generation p95']) <= 16, `${name}: chunk generation p95 exceeded 16 ms`);
+    if (minFps > 0) assert.ok(Number.parseFloat(values['Frame time p95']) <= 33.3, `${name}: frame-time p95 exceeded 33.3 ms`);
     return values;
   }
 

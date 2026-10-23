@@ -1,5 +1,5 @@
 {
-  "url": "http://127.0.0.1:5173/",
+  "url": "http://127.0.0.1:4173/",
   "browser": "155.0.8059.85",
   "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3070 Ti (0x00002482) Direct3D11 vs_5_0 ps_5_0, D3D11)",
   "platform": "win32",
@@ -8,51 +8,73 @@
     "Ground clearance": "3022 km",
     "Surface elevation": "1.34 km",
     "FPS": "144",
+    "Frame time p95": "7.0 ms",
     "Triangles": "70,400",
     "Chunks": "110 visible · 116 cached",
     "Pending chunks": "0",
     "Last chunk generation": "0.3 ms",
-    "Browser memory": "19.5 MiB JS heap"
+    "Chunk generation p95": "0.4 ms",
+    "Browser memory": "7.9 MiB JS heap"
   },
   "middle": {
     "Ground clearance": "364 km",
     "Surface elevation": "1.34 km",
     "FPS": "144",
+    "Frame time p95": "7.1 ms",
     "Triangles": "44,160",
     "Chunks": "147 visible · 220 cached",
     "Pending chunks": "0",
     "Last chunk generation": "0.2 ms",
-    "Browser memory": "23.3 MiB JS heap"
+    "Chunk generation p95": "0.3 ms",
+    "Browser memory": "14.6 MiB JS heap"
   },
   "faceTransition": {
     "Ground clearance": "364 km",
     "Surface elevation": "0.00 km",
     "FPS": "144",
+    "Frame time p95": "7.1 ms",
     "Triangles": "44,800",
     "Chunks": "149 visible · 220 cached",
     "Pending chunks": "0",
     "Last chunk generation": "0.3 ms",
-    "Browser memory": "28.0 MiB JS heap"
+    "Chunk generation p95": "0.3 ms",
+    "Browser memory": "19.0 MiB JS heap"
   },
   "ground": {
     "Ground clearance": "0.08 km",
     "Surface elevation": "0.00 km",
     "FPS": "144",
+    "Frame time p95": "7.0 ms",
     "Triangles": "3,840",
     "Chunks": "6 visible · 220 cached",
     "Pending chunks": "0",
-    "Last chunk generation": "0.3 ms",
-    "Browser memory": "29.4 MiB JS heap"
+    "Last chunk generation": "0.2 ms",
+    "Chunk generation p95": "0.3 ms",
+    "Browser memory": "19.5 MiB JS heap"
   },
   "groundDragged": {
     "Ground clearance": "0.08 km",
     "Surface elevation": "1.93 km",
     "FPS": "144",
+    "Frame time p95": "7.1 ms",
     "Triangles": "2,560",
     "Chunks": "4 visible · 220 cached",
     "Pending chunks": "0",
+    "Last chunk generation": "0.2 ms",
+    "Chunk generation p95": "0.4 ms",
+    "Browser memory": "9.3 MiB JS heap"
+  },
+  "orbitReloaded": {
+    "Ground clearance": "3022 km",
+    "Surface elevation": "1.34 km",
+    "FPS": "144",
+    "Frame time p95": "7.0 ms",
+    "Triangles": "70,400",
+    "Chunks": "110 visible · 116 cached",
+    "Pending chunks": "0",
     "Last chunk generation": "0.3 ms",
-    "Browser memory": "27.5 MiB JS heap"
+    "Chunk generation p95": "0.6 ms",
+    "Browser memory": "9.3 MiB JS heap"
   },
   "errors": []
 }
