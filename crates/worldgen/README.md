@@ -6,7 +6,7 @@ Version 1 samples terrain directly from a seed and a unit spherical direction. T
 {"seed":"12345","generator_version":1,"planet":{"radius_km":2014.6,"sea_level_m":0}}
 ```
 
-The radius is a provisional 1/10 Earth surface-area interpretation; it is used by the renderer, not by the terrain noise. S1-01 must approve the scale and numeric acceptance contract. Height is in metres relative to sea level zero. The server can publish the seed as a string while the browser parses it as a `u32` for the version-1 API.
+The radius follows the Stage 1 choice of 1/10 Earth's surface area; it is used by the renderer, not by the terrain noise. The canonical numeric contract is [S1-01](https://github.com/clickbytes/kubik/issues/3). Height is in metres relative to sea level zero. The server publishes the seed as a string while the browser parses it as a `u32` for the version-1 API.
 
 ## Browser API
 

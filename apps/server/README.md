@@ -33,4 +33,4 @@ Linux shell example:
 KUBIK_CONFIG_PATH=/path/to/world-config.json cargo run --manifest-path apps/server/Cargo.toml
 ```
 
-`GET /health` returns `{"status":"ok"}`. `GET /world-config` returns the configured seed, generator version, radius, and sea level. The seed is a decimal `u32` string to avoid JavaScript number precision surprises. The current radius of 2014.6 km is provisional until S1-01 fixes the planet scale.
+`GET /health` returns `{"status":"ok"}`. `GET /world-config` returns the configured seed, generator version, radius, and sea level. The seed is a decimal `u32` string to avoid JavaScript number precision surprises. The 2014.6 km radius follows the [S1-01 Stage 1 scale decision](https://github.com/clickbytes/kubik/issues/3).

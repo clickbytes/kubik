@@ -24,7 +24,11 @@ jobs:
           package-manager-cache: false
       - run: rustup target add wasm32-unknown-unknown
       - run: cargo test --workspace
+      - run: cargo build --locked -p kubik-server
+      - run: node scripts/smoke-server.mjs
       - run: cargo install wasm-pack --locked
       - run: npm ci --prefix apps/client
       - run: npm run build:worldgen --prefix apps/client
+      - run: wasm-pack build crates/worldgen --target nodejs --out-dir pkg-node
+      - run: node crates/worldgen/tests/compare_wasm.cjs
       - run: npm run build --prefix apps/client

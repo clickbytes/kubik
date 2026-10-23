@@ -7,13 +7,15 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "build:worldgen": "wasm-pack build ../../crates/worldgen --release --target web --out-dir ../../apps/client/public/worldgen"
+    "build:worldgen": "wasm-pack build ../../crates/worldgen --release --target web --out-dir ../../apps/client/public/worldgen",
+    "smoke:browser": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "three": "0.186.1"
   },
   "devDependencies": {
     "@types/three": "0.186.0",
+    "playwright-core": "^1.64.1",
     "typescript": "7.0.2",
     "vite": "8.3.5"
   }

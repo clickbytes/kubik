@@ -4,8 +4,8 @@ repo: clickbytes/kubik
 checked_utc: 2026-10-23
 branch: stage1/integration (from origin/main)
 worktree: D:/Git/flows (primary)
-active: Stage 1 batch #2; S1-01 through S1-07 delegated, coordinator owns integration and S1-08
-next: integrate worker branches, run acceptance checks, review PRs, merge verified work
+active: Stage 1 batch #2; client ground-view fix and coordinator acceptance checks
+next: verify ground zoom and seams, finalize S1-01 contract, open and merge tested integration PR
 
 ## Issues
 
@@ -27,16 +27,14 @@ next: integrate worker branches, run acceptance checks, review PRs, merge verifi
 
 | Worker | Scope | Branch | Worktree | Next |
 |---|---|---|---|---|
-| native agent: worldgen | S1-01/03/04; `crates/worldgen/**` | stage1/worldgen | D:/Git/flows-worldgen | Native/WASM crate and checks |
-| native agent: server | S1-02; `apps/server/**` | stage1/server | D:/Git/flows-server | Axum endpoints and checks |
-| native agent: client | S1-02/05/06/07; `apps/client/**` | stage1/client | D:/Git/flows-client | Viewer, LOD, metrics, build |
-| coordinator | Integration/S1-08; root files | stage1/integration | D:/Git/flows | Review, benchmark, PRs, merge |
+| native agent: client | S1-05/06/07; `apps/client/**` | stage1/client | D:/Git/flows-client | Ground clearance, visible budget, frustum fix |
+| coordinator | Integration/S1-01/08; root files | stage1/integration | D:/Git/flows | Browser checks, contract, PR, merge |
 
 ## Local state
 
 | Files | Git state | Related work |
 |---|---|---|
-| Cargo.toml, README.md, .gitignore, GITHUB.md | modified/untracked | Stage 1 integration and checkpoint |
+| GITHUB.md | modified | Stage 1 execution checkpoint |
 
 ## Log
 
@@ -48,3 +46,4 @@ next: integrate worker branches, run acceptance checks, review PRs, merge verifi
 | 2026-10-23 | Agent coordination | main / primary | Defined coordinator intake, worker assignment, OpenCode model selection, handoff, integration, and interruption flow in `AGENTS.md`. |
 | 2026-10-23 | S1-00 architecture | main / primary | Expanded #11 into the first Stage 1 task with a module/interface sketch; linked it from #2–#4 and `MAP.md`. |
 | 2026-10-23 | Stage 1 batch | main + three worktrees | Pushed baseline commit `9c76985`; assigned separate worldgen, server, and client branches. |
+| 2026-10-23 | Integration | stage1/integration / primary | Reviewed and merged server, worldgen, and client slices; Rust and native/WASM checks pass; browser ground-view fixes remain. |
