@@ -1,0 +1,11 @@
+.git
+.drafts
+target
+**/target
+**/node_modules
+**/dist
+**/pkg
+**/pkg-node
+**/pkg-web
+apps/client/public/worldgen
+globe-smoke.png
