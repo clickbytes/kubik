@@ -55,6 +55,7 @@ try {
     assert.ok(Number(values.FPS) >= minFps, `${name}: FPS below ${minFps}`);
     assert.ok(Number.parseFloat(values['Chunk generation p95']) <= 16, `${name}: chunk generation p95 exceeded 16 ms`);
     if (minFps > 0) assert.ok(Number.parseFloat(values['Frame time p95']) <= 33.3, `${name}: frame-time p95 exceeded 33.3 ms`);
+    assert.match(values['Stage 1 targets'] ?? '', /FPS ≥30 · frame p95 ≤33\.3 ms · chunk p95 ≤16 ms/);
     const selectedIds = await page.locator('#metrics').getAttribute('data-chunk-ids');
     assert.ok(selectedIds, `${name}: selected chunk IDs unavailable`);
     values.selectedIdsCount = selectedIds.split(',').length;

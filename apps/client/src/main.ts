@@ -150,6 +150,7 @@ async function start(): Promise<void> {
         <div><span>Pending chunks</span><b>${values.queued}</b></div>
         <div><span>Last chunk generation</span><b>${values.generationMs.toFixed(1)} ms</b></div>
         <div><span>Chunk generation p95</span><b>${generationP95 === null ? 'unavailable' : `${generationP95.toFixed(1)} ms`}</b></div>
+        <div><span>Stage 1 targets</span><b>FPS ≥30 · frame p95 ≤33.3 ms · chunk p95 ≤16 ms</b></div>
         <div><span>Browser memory</span><b>${memoryText}</b></div>`;
       lastMetrics = now;
     }
