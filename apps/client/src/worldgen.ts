@@ -20,7 +20,7 @@ export interface Sampler {
 }
 
 interface WorldgenModule extends Sampler {
-  default: (input?: string) => Promise<unknown>;
+  default: (input?: { module_or_path: string }) => Promise<unknown>;
 }
 
 export async function loadWorldConfig(): Promise<WorldConfig> {
@@ -50,7 +50,7 @@ export async function loadSampler(): Promise<Sampler> {
   let module: WorldgenModule;
   try {
     module = await import(/* @vite-ignore */ moduleUrl) as WorldgenModule;
-    await module.default(new URL('worldgen/worldgen_bg.wasm', document.baseURI).href);
+    await module.default({ module_or_path: new URL('worldgen/worldgen_bg.wasm', document.baseURI).href });
   } catch (error) {
     throw new Error(`World generator WASM is unavailable. Run npm run build:worldgen. ${String(error)}`);
   }
