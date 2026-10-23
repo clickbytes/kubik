@@ -1,0 +1,8 @@
+{
+  "seed": "12345",
+  "generator_version": 1,
+  "planet": {
+    "radius_km": 2014.6,
+    "sea_level_m": 0
+  }
+}

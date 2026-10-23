@@ -1,0 +1,11 @@
+[package]
+name = "worldgen"
+version = "0.1.0"
+edition = "2021"
+description = "Deterministic spherical terrain sampling for KUBIK"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
