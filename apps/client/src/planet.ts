@@ -62,3 +62,25 @@ export function childTiles(tile: Tile): Tile[] {
     { face: tile.face, level, x: x + 1, y: y + 1 },
   ];
 }
+
+export function tileAtDirection(direction: Vector3, level: number): Tile {
+  const { x, y, z } = direction;
+  const ax = Math.abs(x), ay = Math.abs(y), az = Math.abs(z);
+  let face: Face;
+  let u: number;
+  let v: number;
+  if (ax >= ay && ax >= az) {
+    if (x >= 0) { face = 0; u = -z / ax; v = y / ax; }
+    else { face = 1; u = z / ax; v = y / ax; }
+  } else if (ay >= az) {
+    if (y >= 0) { face = 2; u = x / ay; v = -z / ay; }
+    else { face = 3; u = x / ay; v = z / ay; }
+  } else if (z >= 0) {
+    face = 4; u = x / az; v = y / az;
+  } else {
+    face = 5; u = x / z; v = y / az;
+  }
+  const count = 2 ** level;
+  const index = (coordinate: number): number => Math.max(0, Math.min(count - 1, Math.floor((coordinate + 1) * count / 2)));
+  return { face, level, x: index(u), y: index(v) };
+}
